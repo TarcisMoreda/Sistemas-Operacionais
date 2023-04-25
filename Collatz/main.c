@@ -1,35 +1,43 @@
 #include <sys/types.h>
 #include <sys/wait.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 int main(int argc, char const *argv[]){
-	/*
-		Fork faz o processo filho começar na
-		próxima linha de código.
+	if(argc!=2){
+		fprintf(stderr, "Forneça um número como argumento.\n");
+		return -1;
+	}
+	int n = atoi(argv[1]);
+	if(n<1){
+		fprintf(stderr, "Forneça um número maior ou igual a 1.\n");
+		return -1;
+	}
 
-		Enquanto o pai está fazendo a checagem
-		o processo filho está fazendo ela ao
-		mesmo tempo.
-	*/
 	pid_t pid = fork();
 
 	if(pid<0){
-		fprintf(stderr, "Fork failed.\n");
+		fprintf(stderr, "Falha no fork.\n");
 		return -1;
 	}
 	else if(pid==0){
-		// O pai é o processo principal
-		printf("[FILHO]: %d		[PAI]: %d\n", getpid(), getppid());
+		printf("%d ", n);
 
-		// execlp faz com que o processo filho seja substituido
-		//execlp("/bin/ls", "ls", "-ll");
+		while(n!=1){
+			if(n%2==0)
+				n /= 2;
+			else
+				n = (3*n)+1;
+			
+			printf("%d ", n);
+		}
+		putchar('\n');
 	}
 	else{
-		// O pai é o shell
-		printf("[PROCESSO]: %d	[PAI]: %d\n", getpid(), getppid());
 		wait(NULL);
-		printf("Child complete.\n");
+		printf("Processo filho terminado.\n");
 	}
 
 	return 0;
