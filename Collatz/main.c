@@ -10,6 +10,7 @@ int main(int argc, char const *argv[]){
 		fprintf(stderr, "Forneça um número como argumento.\n");
 		return -1;
 	}
+	
 	int n = atoi(argv[1]);
 	if(n<1){
 		fprintf(stderr, "Forneça um número maior ou igual a 1.\n");
